@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kuis BHD BTCLS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root, [data-theme="light"] {
+      --bg: #f7f6f2;
+      --surface: #fcfbf8;
+      --surface-2: #f1eee8;
+      --text: #28251d;
+      --muted: #6f6c67;
+      --border: #d8d4cc;
+      --primary: #0d6a6f;
+      --primary-2: #d7e8e6;
+      --success: #3d7a23;
+      --success-bg: #dbe8d1;
+      --danger: #a0346e;
+      --danger-bg: #efd8e5;
+      --gold: #a77a06;
+      --shadow: 0 12px 32px rgba(40,37,29,.10);
+      --shadow-sm: 0 4px 14px rgba(40,37,29,.07);
+      --radius: 20px;
+      --radius-sm: 14px;
+      --font-display: 'Playfair Display', serif;
+      --font-body: 'Inter', sans-serif;
+    }
+    [data-theme="dark"] {
+      --bg: #151412;
+      --surface: #1d1b18;
+      --surface-2: #24211d;
+      --text: #ece7de;
+      --muted: #a39d94;
+      --border: #3a3631;
+      --primary: #67b4bb;
+      --primary-2: #24393a;
+      --success: #79b55d;
+      --success-bg: #223223;
+      --danger: #dd73b2;
+      --danger-bg: #3a2430;
+      --gold: #e6bb4b;
+      --shadow: 0 14px 40px rgba(0,0,0,.35);
+      --shadow-sm: 0 6px 18px rgba(0,0,0,.25);
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-body);
+      background: linear-gradient(180deg, var(--bg), var(--surface-2));
+      color: var(--text);
+      min-height: 100vh;
+    }
+    button { font: inherit; }
+    .wrap { max-width: 980px; margin: 0 auto; padding: 24px; }
+    .topbar {
+      position: sticky; top: 0; z-index: 20;
+      backdrop-filter: blur(14px);
+      background: color-mix(in srgb, var(--bg) 82%, transparent);
+      border-bottom: 1px solid var(--border);
+    }
+    .topbar-inner {
+      max-width: 980px; margin: 0 auto; padding: 14px 24px;
+      display: flex; justify-content: space-between; align-items: center; gap: 16px;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand-mark {
+      width: 42px; height: 42px; border-radius: 14px;
+      background: linear-gradient(135deg, var(--primary), #1c8f96);
+      display: grid; place-items: center; color: white; font-weight: 700;
+      box-shadow: var(--shadow-sm);
+    }
+    .brand h1 {
+      margin: 0; font-family: var(--font-display); font-size: 1.2rem; line-height: 1.1;
+    }
+    .brand p { margin: 2px 0 0; color: var(--muted); font-size: .82rem; }
+    .theme-btn {
+      border: 1px solid var(--border); background: var(--surface); color: var(--text);
+      width: 44px; height: 44px; border-radius: 999px; cursor: pointer;
+      box-shadow: var(--shadow-sm);
+    }
+    .hero {
+      display: grid; place-items: center; min-height: calc(100vh - 72px); text-align: center;
+    }
+    .hero-card {
+      background: color-mix(in srgb, var(--surface) 92%, transparent);
+      border: 1px solid var(--border);
+      border-radius: 28px; padding: 34px; box-shadow: var(--shadow);
+      max-width: 860px;
+    }
+    .eyebrow {
+      display: inline-flex; gap: 8px; align-items: center;
+      border: 1px solid var(--primary); color: var(--primary);
+      padding: 8px 14px; border-radius: 999px; font-size: .78rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .06em;
+      background: var(--primary-2);
+    }
+    .hero h2 {
+      font-family: var(--font-display); font-size: clamp(2.2rem, 5vw, 4rem);
+      margin: 18px 0 12px; line-height: 1.08;
+    }
+    .hero h2 span { color: var(--primary); font-style: italic; }
+    .hero p {
+      margin: 0 auto; max-width: 700px; color: var(--muted); font-size: 1.04rem; line-height: 1.75;
+    }
+    .hero-stats {
+      display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; margin: 28px 0;
+    }
+    .stat {
+      border: 1px solid var(--border); background: var(--surface); border-radius: 18px; padding: 16px;
+    }
+    .stat strong { display: block; font-family: var(--font-display); font-size: 1.9rem; color: var(--primary); }
+    .stat span { font-size: .78rem; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+    .primary-btn, .secondary-btn {
+      border: none; border-radius: 999px; padding: 14px 24px; font-weight: 700; cursor: pointer;
+      transition: .2s ease; min-height: 48px;
+    }
+    .primary-btn {
+      background: var(--primary); color: white; box-shadow: var(--shadow-sm);
+    }
+    .primary-btn:hover { transform: translateY(-1px); }
+    .secondary-btn {
+      background: var(--surface); color: var(--text); border: 1px solid var(--border);
+    }
+    .screen { display: none; }
+    .screen.active { display: block; }
+    .quiz-shell { padding-top: 26px; }
+    .meta-bar {
+      display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+    .meta-pill {
+      padding: 8px 12px; background: var(--surface); border: 1px solid var(--border);
+      border-radius: 999px; font-size: .85rem; color: var(--muted);
+    }
+    .progress {
+      height: 8px; background: var(--surface-2); border-radius: 999px; overflow: hidden; margin-bottom: 18px;
+      border: 1px solid var(--border);
+    }
+    .progress > div { height: 100%; background: linear-gradient(90deg, var(--primary), #2b8b90); width: 0%; transition: .3s ease; }
+    .map {
+      display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px;
+    }
+    .map button {
+      width: 36px; height: 36px; border-radius: 12px; border: 1px solid var(--border); background: var(--surface);
+      color: var(--muted); cursor: pointer; font-weight: 700;
+    }
+    .map button.current { border-color: var(--primary); color: var(--primary); box-shadow: 0 0 0 3px var(--primary-2); }
+    .map button.ok { background: var(--success); color: white; border-color: var(--success); }
+    .map button.bad { background: var(--danger); color: white; border-color: var(--danger); }
+    .card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 24px; box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .card-head {
+      background: linear-gradient(135deg, var(--primary), #1f8087); color: white; padding: 18px 22px;
+    }
+    .card-head small {
+      display: inline-block; padding: 6px 10px; border-radius: 999px; background: rgba(255,255,255,.18);
+      font-size: .72rem; text-transform: uppercase; letter-spacing: .06em; font-weight: 700; margin-bottom: 10px;
+    }
+    .card-head h3 { margin: 0; font-size: 1rem; font-weight: 600; }
+    .section {
+      padding: 22px;
+      border-top: 1px solid var(--border);
+    }
+    .label {
+      color: var(--primary); font-weight: 700; font-size: .75rem; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 10px;
+    }
+    .case {
+      line-height: 1.8; color: var(--text); background: var(--surface-2); border: 1px solid var(--border);
+      border-radius: 18px; padding: 18px;
+    }
+    .question {
+      font-size: 1.05rem; line-height: 1.65; font-weight: 700; margin-bottom: 16px;
+    }
+    .options { display: grid; gap: 10px; }
+    .opt {
+      display: flex; gap: 12px; align-items: flex-start; width: 100%; text-align: left;
+      padding: 14px 16px; border-radius: 18px; border: 1px solid var(--border); background: var(--bg);
+      cursor: pointer; transition: .18s ease;
+    }
+    .opt:hover { border-color: var(--primary); transform: translateX(2px); }
+    .opt-letter {
+      width: 30px; height: 30px; border-radius: 999px; border: 1px solid var(--border); flex: 0 0 auto;
+      display: grid; place-items: center; font-size: .82rem; font-weight: 700; background: var(--surface);
+    }
+    .opt.correct { background: var(--success-bg); border-color: var(--success); }
+    .opt.correct .opt-letter { background: var(--success); border-color: var(--success); color: white; }
+    .opt.wrong { background: var(--danger-bg); border-color: var(--danger); }
+    .opt.wrong .opt-letter { background: var(--danger); border-color: var(--danger); color: white; }
+    .opt.dim { opacity: .45; }
+    .explain {
+      margin-top: 18px; border-radius: 18px; padding: 16px 18px; line-height: 1.75; display: none;
+      border: 1px solid var(--border);
+    }
+    .explain.show { display: block; }
+    .explain.good { background: var(--success-bg); border-color: var(--success); }
+    .explain.bad { background: var(--danger-bg); border-color: var(--danger); }
+    .explain strong { display: block; margin-bottom: 8px; }
+    .actions {
+      display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 18px; flex-wrap: wrap;
+    }
+    .result-box {
+      max-width: 840px; margin: 36px auto 70px; background: var(--surface); border: 1px solid var(--border);
+      border-radius: 28px; padding: 30px; box-shadow: var(--shadow);
+    }
+    .score-ring-wrap { display: grid; place-items: center; margin-bottom: 18px; }
+    .score-ring { width: 180px; height: 180px; position: relative; }
+    .score-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+    .score-ring .txt {
+      position: absolute; inset: 0; display: grid; place-items: center; text-align: center;
+      font-family: var(--font-display); font-size: 2.4rem; font-weight: 700;
+    }
+    .score-ring .txt small {
+      display: block; font-family: var(--font-body); color: var(--muted); font-size: .8rem; text-transform: uppercase; letter-spacing: .08em;
+      margin-top: 4px;
+    }
+    .result-box h2 {
+      margin: 8px 0 10px; text-align: center; font-family: var(--font-display); font-size: 2rem;
+    }
+    .result-box > p {
+      text-align: center; color: var(--muted); max-width: 620px; margin: 0 auto 22px; line-height: 1.75;
+    }
+    .summary {
+      display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 24px;
+    }
+    .summary .box {
+      border: 1px solid var(--border); background: var(--bg); border-radius: 18px; padding: 18px; text-align: center;
+    }
+    .summary strong {
+      display: block; font-family: var(--font-display); font-size: 2rem;
+    }
+    .summary span { color: var(--muted); font-size: .8rem; text-transform: uppercase; letter-spacing: .05em; }
+    .review h3 {
+      font-family: var(--font-display); font-size: 1.35rem; margin: 0 0 14px;
+    }
+    .review-item {
+      display: flex; gap: 12px; align-items: flex-start; padding: 14px 16px; border: 1px solid var(--border);
+      border-radius: 16px; background: var(--bg); margin-bottom: 10px;
+    }
+    .badge {
+      width: 26px; height: 26px; border-radius: 999px; display: grid; place-items: center; color: white; font-weight: 700; flex: 0 0 auto;
+    }
+    .badge.ok { background: var(--success); }
+    .badge.bad { background: var(--danger); }
+    .review-item strong { display: block; margin-bottom: 4px; }
+    .review-item small { color: var(--muted); }
+    .footnote {
+      margin-top: 18px; font-size: .84rem; color: var(--muted); text-align: center;
+    }
+    @media (max-width: 760px) {
+      .wrap { padding: 16px; }
+      .topbar-inner { padding: 12px 16px; }
+      .hero-card, .result-box { padding: 20px; }
+      .hero-stats, .summary { grid-template-columns: repeat(2,1fr); }
+      .section { padding: 18px; }
+    }
+    @media (max-width: 540px) {
+      .hero-stats, .summary { grid-template-columns: 1fr; }
+      .actions { flex-direction: column; }
+      .actions button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="brand-mark">B</div>
+        <div>
+          <h1>Kuis BHD BTCLS</h1>
+          <p>Study case interaktif berbasis materi PDF</p>
+        </div>
+      </div>
+      <button class="theme-btn" id="themeBtn" aria-label="Ganti tema">◐</button>
+    </div>
+  </header>
+
+  <main>
+    <section id="homeScreen" class="screen active hero wrap">
+      <div class="hero-card">
+        <div class="eyebrow">BTCLS · Bantuan Hidup Dasar · HOTS Quiz</div>
+        <h2>Web Kuis <span>Study Case</span> BHD</h2>
+        <p>Kuis ini berisi 20 soal pilihan ganda berbasis studi kasus yang mencakup konsep, prinsip, algoritma, AED, rescue breathing, ROSC, 5H-5T, dan pengambilan keputusan klinis pada Bantuan Hidup Dasar.</p>
+        <div class="hero-stats">
+          <div class="stat"><strong>20</strong><span>Jumlah Soal</span></div>
+          <div class="stat"><strong>HOTS</strong><span>Level Soal</span></div>
+          <div class="stat"><strong>5</strong><span>Opsi Jawaban</span></div>
+          <div class="stat"><strong>BHD</strong><span>Fokus Materi</span></div>
+        </div>
+        <button class="primary-btn" id="startBtn">Mulai Kuis</button>
+      </div>
+    </section>
+
+    <section id="quizScreen" class="screen wrap quiz-shell">
+      <div class="meta-bar">
+        <div class="meta-pill">Soal <strong id="currentNum">1</strong> / <span id="totalNum">20</span></div>
+        <div class="meta-pill">Skor benar: <strong id="liveScore">0</strong></div>
+      </div>
+      <div class="progress"><div id="progressBar"></div></div>
+      <div class="map" id="questionMap"></div>
+      <div class="card" id="questionCard"></div>
+      <div class="actions">
+        <button class="secondary-btn" id="prevBtn">Sebelumnya</button>
+        <div style="display:flex; gap:12px; flex-wrap:wrap;">
+          <button class="secondary-btn" id="nextBtn">Selanjutnya</button>
+          <button class="primary-btn" id="finishBtn" style="display:none;">Selesai</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="resultScreen" class="screen wrap"></section>
+  </main>
+
+  <script>
+    const questions = [
+      {
+        category: 'Keselamatan Penolong',
+        caseText: 'Seorang perawat bernama Rina sedang berjalan di pusat perbelanjaan ketika melihat seorang pria paruh baya tiba-tiba terjatuh di lantai. Sebelum menyentuh korban, Rina memperhatikan bahwa di sekitar area terdapat genangan cairan dan kabel listrik yang tidak terlindungi. Ia ingin segera menolong tetapi juga memahami prinsip dasar keselamatan dalam BHD.',
+        question: 'Tindakan pertama yang paling tepat dilakukan Rina sebelum menyentuh korban adalah...',
+        options: ['Langsung memeriksa respons korban dengan menepuk bahu', 'Segera melakukan kompresi dada karena setiap detik sangat berharga', 'Menilai keamanan lingkungan dan memastikan area aman bagi penolong maupun korban', 'Memanggil bantuan terlebih dahulu sebelum melakukan apa pun', 'Memakai sarung tangan steril dari tas P3K terdekat'],
+        answer: 2,
+        explanation: 'Langkah pertama algoritma BHD adalah Dangerous, yaitu memastikan lingkungan aman bagi penolong dan korban. Kabel listrik dan genangan cairan dapat membahayakan penolong. Respons, memanggil bantuan, dan tindakan lain dilakukan setelah keamanan dipastikan.'
+      },
+      {
+        category: 'Chain of Survival IHCA',
+        caseText: 'Dokter Hadi sedang bertugas di IGD ketika seorang pasien yang sedang diperiksa tiba-tiba kehilangan kesadaran. Monitor menunjukkan irama jantung yang tidak normal. Dokter harus bertindak sesuai Chain of Survival untuk kejadian henti jantung di dalam rumah sakit.',
+        question: 'Urutan yang paling tepat untuk IHCA adalah...',
+        options: ['Aktivasi respons darurat → High-Quality CPR → Defibrilasi → Perawatan pasca-henti → Pemulihan', 'Early Recognition and Prevention → Aktivasi respons darurat → High-Quality CPR → Defibrilasi → Perawatan pasca-henti → Pemulihan', 'High-Quality CPR → Defibrilasi → Aktivasi Code Blue → Pemulihan', 'Aktivasi PSC 119 → High-Quality CPR → Defibrilasi → Pemulihan', 'Early Recognition → CPR → Panggil ambulans → Defibrilasi → Pemulihan'],
+        answer: 1,
+        explanation: 'Pada IHCA, langkah awal adalah Early Recognition and Prevention, kemudian aktivasi respons darurat, High-Quality CPR, defibrilasi, perawatan pasca-henti jantung, dan recovery. Ini membedakan IHCA dari OHCA.'
+      },
+      {
+        category: 'Penilaian Respons',
+        caseText: 'Seorang warga menemukan tetangganya tergeletak di halaman rumah. Setelah memastikan lokasi aman, ia memanggil korban dan menepuk bahunya. Korban sama sekali tidak memberikan respons terhadap panggilan maupun sentuhan.',
+        question: 'Dalam sistem AVPU, kondisi korban tersebut dikategorikan sebagai...',
+        options: ['Alert', 'Verbal', 'Pain', 'Unresponsive', 'Semi-conscious'],
+        answer: 3,
+        explanation: 'Korban yang tidak merespons rangsang apa pun masuk kategori Unresponsive. Alert berarti sadar penuh, Verbal merespons suara, dan Pain merespons rangsang nyeri.'
+      },
+      {
+        category: 'Urgensi Waktu',
+        caseText: 'Dalam pelatihan keselamatan kerja, instruktur diminta menjelaskan mengapa penanganan henti jantung harus dilakukan sangat cepat. Ia ingin menjawab berdasarkan dasar fisiologi yang ada di materi BHD.',
+        question: 'Jika otak tidak mendapatkan oksigen akibat henti jantung, kerusakan serius dapat mulai terjadi dalam rentang waktu...',
+        options: ['1–2 menit', '3–8 menit', '10–15 menit', '15–20 menit', 'Lebih dari 20 menit'],
+        answer: 1,
+        explanation: 'Materi menjelaskan bahwa tanpa oksigen, otak dapat mengalami kerusakan berat dalam 3–8 menit. Inilah dasar mengapa tindakan BHD harus dimulai sesegera mungkin.'
+      },
+      {
+        category: 'Lokasi Kompresi',
+        caseText: 'Dalam simulasi CPR dewasa, peserta A menempatkan tangan di bagian atas sternum. Peserta B meletakkan tumit tangan di setengah bagian bawah sternum di antara dua puting susu. Fasilitator harus menentukan siapa yang benar.',
+        question: 'Pernyataan yang paling tepat adalah...',
+        options: ['Peserta B salah karena kompresi harus di bagian atas sternum', 'Peserta A salah karena lokasi kompresi yang benar adalah setengah bagian bawah sternum di antara dua puting susu', 'Keduanya benar karena posisi tidak terlalu berpengaruh', 'Peserta A benar karena mencegah fraktur iga', 'Peserta B salah karena harus di bawah prosesus xifoideus'],
+        answer: 1,
+        explanation: 'Lokasi kompresi yang benar pada dewasa adalah setengah bagian bawah sternum di antara dua puting susu. Bagian atas sternum atau area xifoideus tidak tepat dan dapat menurunkan efektivitas CPR atau menimbulkan cedera.'
+      },
+      {
+        category: 'High-Quality CPR',
+        caseText: 'Dua penolong sedang melakukan CPR pada pasien dewasa. Setelah 5 siklus kompresi, mereka akan mengevaluasi nadi dan napas. Salah satu penolong menanyakan berapa lama maksimal interupsi kompresi yang diperbolehkan.',
+        question: 'Maksimal interupsi kompresi yang diperbolehkan adalah...',
+        options: ['5 detik', '10 detik', '15 detik', '20 detik', '30 detik'],
+        answer: 1,
+        explanation: 'Prinsip High-Quality CPR menekankan minimnya interupsi kompresi, yaitu kurang dari 10 detik, termasuk saat evaluasi nadi dan napas.'
+      },
+      {
+        category: 'Parameter Kompresi Dewasa',
+        caseText: 'Seorang relawan PMI sedang mengajari masyarakat tentang teknik kompresi dada yang benar pada orang dewasa. Peserta meminta angka pasti mengenai kedalaman dan kecepatan kompresi.',
+        question: 'Parameter kompresi dada dewasa yang benar adalah...',
+        options: ['Kedalaman 3 cm, 80–100 kali/menit', 'Kedalaman 5 cm, 100–120 kali/menit', 'Kedalaman 6–7 cm, 120–140 kali/menit', 'Kedalaman 4 cm, 100–120 kali/menit', 'Kedalaman 5 cm, 60–80 kali/menit'],
+        answer: 1,
+        explanation: 'Standar kompresi dewasa pada materi adalah kedalaman sekitar 5 cm dengan kecepatan 100–120 kali per menit.'
+      },
+      {
+        category: 'Airway Trauma Servikal',
+        caseText: 'Seorang korban kecelakaan lalu lintas tidak sadar dan dicurigai mengalami trauma servikal. Penolong harus membuka jalan napas tanpa memperburuk cedera leher.',
+        question: 'Teknik pembukaan jalan napas yang paling tepat adalah...',
+        options: ['Head Tilt Chin Lift', 'Jaw Thrust', 'Head Tilt saja', 'Sniffing Position', 'Finger Sweep'],
+        answer: 1,
+        explanation: 'Pada pasien dengan dugaan trauma servikal, teknik yang direkomendasikan adalah Jaw Thrust karena meminimalkan pergerakan tulang belakang leher.'
+      },
+      {
+        category: 'Pemeriksaan Nadi Anak',
+        caseText: 'Seorang guru olahraga menemukan siswa usia 8 tahun pingsan di lapangan. Setelah area aman dan korban tidak responsif, guru ingin memeriksa nadi sebelum memulai tindakan.',
+        question: 'Lokasi pemeriksaan nadi yang paling tepat adalah...',
+        options: ['Brakhialis', 'Radialis', 'Karotis', 'Femoralis', 'Temporalis'],
+        answer: 2,
+        explanation: 'Untuk anak, pemeriksaan nadi dilakukan sama seperti dewasa, yaitu pada nadi karotis. Nadi brakhialis dipakai khusus pada bayi.'
+      },
+      {
+        category: 'Pasca ROSC',
+        caseText: 'Seorang pasien berhasil mengalami ROSC setelah resusitasi di bangsal rumah sakit, tetapi masih dalam keadaan koma. Dokter harus menentukan terapi pasca-henti jantung yang tepat.',
+        question: 'Target manajemen suhu yang direkomendasikan adalah...',
+        options: ['37°C selama 48 jam', '32–36°C selama 24 jam', 'Di bawah 30°C', '38–39°C', 'Tidak perlu pemantauan suhu khusus'],
+        answer: 1,
+        explanation: 'Pada pasien koma pasca-ROSC, Targeted Temperature Management dilakukan dengan mempertahankan suhu 32–36°C selama 24 jam.'
+      },
+      {
+        category: 'Rescue Breathing',
+        caseText: 'Budi menemukan korban tidak sadar di ruang panel. Setelah pemeriksaan, ia mendapati korban memiliki nadi tetapi tidak bernapas. Ia harus menentukan tindakan paling tepat.',
+        question: 'Tindakan yang paling tepat adalah...',
+        options: ['CPR 30:2', 'Rescue breathing 1 napas setiap 6 detik dan evaluasi tiap 2 menit', 'Menunggu bantuan tanpa tindakan', 'Defibrilasi segera', 'Ventilasi 30 kali per menit'],
+        answer: 1,
+        explanation: 'Jika ada nadi tetapi tidak ada napas, korban mengalami respiratory arrest. Tindakan yang tepat adalah rescue breathing satu napas setiap 6 detik dengan evaluasi berkala.'
+      },
+      {
+        category: 'AED',
+        caseText: 'Saat AED sedang menganalisis irama, salah satu penolong ingin tetap menempel pada pasien agar CPR tidak terhenti terlalu lama. Tim harus memutuskan tindakan paling aman.',
+        question: 'Yang paling tepat saat AED menganalisis irama adalah...',
+        options: ['Tetap kompresi dengan satu tangan', 'Hentikan semua kontak dan teriak “Clear!”', 'Pegang dada pasien pelan-pelan', 'Lanjutkan CPR penuh karena analisis tidak terganggu', 'Menjauh tanpa komunikasi'],
+        answer: 1,
+        explanation: 'AED harus menganalisis irama tanpa gangguan. Semua penolong harus berhenti menyentuh pasien dan memastikan semua orang clear.'
+      },
+      {
+        category: 'IHCA vs OHCA',
+        caseText: 'Dalam sesi evaluasi tim tanggap darurat, peserta diminta menjelaskan komponen yang membedakan Chain of Survival pada kejadian henti jantung di rumah sakit dan di luar rumah sakit.',
+        question: 'Komponen yang ada pada IHCA tetapi tidak pada OHCA adalah...',
+        options: ['High-Quality CPR', 'Defibrilasi', 'Early Recognition and Prevention', 'Post-Cardiac Arrest Care', 'Recovery'],
+        answer: 2,
+        explanation: 'Komponen pembeda utama pada IHCA adalah Early Recognition and Prevention karena pasien rumah sakit dapat dipantau sejak awal.'
+      },
+      {
+        category: 'Komplikasi CPR',
+        caseText: 'Seorang kader kesehatan bertanya apakah CPR memiliki risiko. Instruktur ingin menjelaskan komplikasi yang memang mungkin terjadi akibat kompresi dada.',
+        question: 'Yang BUKAN komplikasi CPR dalam materi adalah...',
+        options: ['Fraktur kosta', 'Memar paru', 'Luka organ lain', 'Penumpukan udara di lambung', 'Fraktur servikal'],
+        answer: 4,
+        explanation: 'Fraktur servikal bukan komplikasi khas CPR yang dicantumkan dalam materi. Komplikasi yang disebut adalah fraktur kosta, cedera paru, luka organ lain, dan udara di lambung.'
+      },
+      {
+        category: 'DNAR',
+        caseText: 'Seorang pasien lansia dengan dokumen DNAR yang sah mengalami henti jantung di ruang perawatan. Keluarga memohon agar dilakukan CPR. Dokter harus mengambil keputusan profesional.',
+        question: 'Keputusan yang paling tepat adalah...',
+        options: ['Tetap melakukan CPR penuh karena keluarga meminta', 'Tidak melakukan CPR karena adanya DNAR yang sah', 'CPR selama 5 menit lalu hentikan', 'Tunggu surat persetujuan keluarga baru', 'Defibrilasi saja tanpa kompresi'],
+        answer: 1,
+        explanation: 'Dokumen DNAR yang sah merupakan dasar etis dan klinis untuk tidak memulai atau menghentikan resusitasi.'
+      },
+      {
+        category: 'BVM Dua Penolong',
+        caseText: 'Dalam simulasi pabrik, dua penolong tersedia untuk ventilasi menggunakan BVM. Mereka ingin menggunakan teknik pegangan masker yang paling efektif.',
+        question: 'Teknik yang direkomendasikan adalah...',
+        options: ['E-C Clamp satu tangan', 'Double E-C Clamp', 'Satu tangan pegang masker satu tangan pompa bag', 'Satu pegang kepala satu pegang masker dan pompa', 'Sama saja dengan satu penolong'],
+        answer: 1,
+        explanation: 'Untuk dua penolong, teknik yang direkomendasikan adalah Double E-C Clamp agar seal masker lebih baik, sementara penolong kedua memompa bag.'
+      },
+      {
+        category: 'Kompresi Bayi',
+        caseText: 'Seorang bidan menangani bayi usia 3 bulan yang tidak bernapas. Tersedia dua penolong untuk resusitasi. Ia ingin memilih teknik kompresi yang paling direkomendasikan.',
+        question: 'Teknik dan kedalaman yang paling tepat adalah...',
+        options: ['1 telapak tangan, 5 cm', '2 jari, 4 cm', 'Dua ibu jari melingkar dada, 4 cm, rasio 15:2', 'Tumit satu tangan, 3 cm', '2 telapak tangan seperti dewasa, 4 cm'],
+        answer: 2,
+        explanation: 'Pada bayi dengan dua penolong, teknik yang direkomendasikan adalah dua ibu jari dengan kedua telapak tangan melingkar dada bayi, kedalaman sekitar 4 cm dan rasio 15:2.'
+      },
+      {
+        category: 'Tidak Melakukan RJP',
+        caseText: 'Kepala bidang K3 ingin mengajarkan kepada seluruh karyawan kapan RJP tidak boleh dilakukan. Ia mencari contoh kondisi yang sesuai dengan materi.',
+        question: 'Alasan TEPAT untuk tidak melakukan RJP adalah...',
+        options: ['Korban berusia sangat tua', 'AED tidak tersedia', 'Ada tanda rigor mortis yang jelas', 'Hanya ada satu penolong', 'Korban tidak dikenal identitasnya'],
+        answer: 2,
+        explanation: 'Rigor mortis merupakan tanda kematian irreversibel sehingga RJP tidak dilakukan. Usia lanjut, tidak ada AED, atau penolong tunggal bukan alasan untuk tidak memulai pertolongan.'
+      },
+      {
+        category: '5H',
+        caseText: 'Seorang pasien pasca-ROSC memiliki tekanan vena sentral rendah, akral dingin, dan output urin menurun. Tim menilai penyebab reversibel henti jantung menggunakan pendekatan 5H dan 5T.',
+        question: 'Penyebab paling mungkin berdasarkan 5H adalah...',
+        options: ['Hypothermia', 'Hypoxia', 'Hypovolemia', 'Hydrogen ion (acidosis)', 'Hypo/hyperkalemia'],
+        answer: 2,
+        explanation: 'Gambaran tersebut paling sesuai dengan hypovolemia, yaitu kekurangan volume intravaskular yang menyebabkan perfusi menurun.'
+      },
+      {
+        category: 'Tujuan BHD',
+        caseText: 'Dalam edukasi keluarga pasien, seorang perawat menjelaskan tujuan utama Bantuan Hidup Dasar agar keluarga memahami pentingnya teknik ini dalam situasi gawat darurat.',
+        question: 'Dua tujuan utama BHD yang paling tepat adalah...',
+        options: ['Menyembuhkan penyakit jantung dan mencegah kekambuhan', 'Mencegah berhentinya sirkulasi/pernapasan dan memberikan bantuan eksternal terhadap sirkulasi serta ventilasi', 'Memanggil bantuan medis dan memberikan obat darurat', 'Mendiagnosis penyebab henti jantung dan memberi defibrilasi', 'Mempertahankan kesadaran korban dan mencegah hipotermia'],
+        answer: 1,
+        explanation: 'Tujuan utama BHD adalah mencegah berhentinya sirkulasi atau pernapasan dan memberi bantuan eksternal terhadap sirkulasi serta ventilasi untuk menyelamatkan nyawa pasien.'
+      }
+    ];
+
+    const homeScreen = document.getElementById('homeScreen');
+    const quizScreen = document.getElementById('quizScreen');
+    const resultScreen = document.getElementById('resultScreen');
+    const questionCard = document.getElementById('questionCard');
+    const questionMap = document.getElementById('questionMap');
+    const currentNum = document.getElementById('currentNum');
+    const totalNum = document.getElementById('totalNum');
+    const liveScore = document.getElementById('liveScore');
+    const progressBar = document.getElementById('progressBar');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const finishBtn = document.getElementById('finishBtn');
+    const startBtn = document.getElementById('startBtn');
+    const themeBtn = document.getElementById('themeBtn');
+
+    totalNum.textContent = questions.length;
+
+    let currentIndex = 0;
+    let answers = Array(questions.length).fill(null);
+
+    function scoreCount() {
+      return answers.filter(a => a && a.correct).length;
+    }
+
+    function renderMap() {
+      questionMap.innerHTML = '';
+      questions.forEach((q, i) => {
+        const b = document.createElement('button');
+        b.textContent = i + 1;
+        if (i === currentIndex) b.classList.add('current');
+        if (answers[i]) b.classList.add(answers[i].correct ? 'ok' : 'bad');
+        b.addEventListener('click', () => {
+          currentIndex = i;
+          renderQuiz();
+        });
+        questionMap.appendChild(b);
+      });
+    }
+
+    function renderQuiz() {
+      const q = questions[currentIndex];
+      const answerState = answers[currentIndex];
+      currentNum.textContent = currentIndex + 1;
+      liveScore.textContent = scoreCount();
+      progressBar.style.width = (((currentIndex + 1) / questions.length) * 100) + '%';
+      prevBtn.disabled = currentIndex === 0;
+      nextBtn.style.display = currentIndex === questions.length - 1 ? 'none' : 'inline-block';
+      finishBtn.style.display = currentIndex === questions.length - 1 ? 'inline-block' : 'none';
+
+      questionCard.innerHTML = `
+        <div class="card-head">
+          <small>Soal ${currentIndex + 1} dari ${questions.length}</small>
+          <h3>${q.category}</h3>
+        </div>
+        <div class="section">
+          <div class="label">Studi Kasus</div>
+          <div class="case">${q.caseText}</div>
+        </div>
+        <div class="section">
+          <div class="question">${q.question}</div>
+          <div class="options">
+            ${q.options.map((opt, idx) => {
+              let cls = 'opt';
+              if (answerState) {
+                if (idx === q.answer) cls += ' correct';
+                else if (idx === answerState.choice) cls += ' wrong';
+                else cls += ' dim';
+              }
+              return `
+                <button class="${cls}" data-idx="${idx}" ${answerState ? 'disabled' : ''}>
+                  <span class="opt-letter">${String.fromCharCode(65 + idx)}</span>
+                  <span>${opt}</span>
+                </button>`;
+            }).join('')}
+          </div>
+          <div class="explain ${answerState ? 'show ' + (answerState.correct ? 'good' : 'bad') : ''}">
+            ${answerState ? `<strong>${answerState.correct ? 'Jawaban Anda benar.' : 'Jawaban Anda belum tepat. Jawaban yang benar: ' + String.fromCharCode(65 + q.answer)}</strong>${q.explanation}` : ''}
+          </div>
+        </div>
+      `;
+
+      if (!answerState) {
+        questionCard.querySelectorAll('.opt').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const choice = Number(btn.dataset.idx);
+            answers[currentIndex] = { choice, correct: choice === q.answer };
+            renderQuiz();
+          });
+        });
+      }
+      renderMap();
+    }
+
+    function showScreen(name) {
+      [homeScreen, quizScreen, resultScreen].forEach(el => el.classList.remove('active'));
+      if (name === 'home') homeScreen.classList.add('active');
+      if (name === 'quiz') quizScreen.classList.add('active');
+      if (name === 'result') resultScreen.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function renderResult() {
+      const total = questions.length;
+      const correct = scoreCount();
+      const wrong = total - correct;
+      const percent = Math.round((correct / total) * 100);
+      let title = 'Perlu Belajar Lagi';
+      let desc = 'Hasil Anda menunjukkan materi BHD masih perlu diperdalam lagi agar pengambilan keputusan klinis semakin akurat.';
+      let color = 'var(--danger)';
+      if (percent >= 85) {
+        title = 'Sangat Baik';
+        desc = 'Pemahaman Anda terhadap konsep dan penerapan BHD sangat baik. Analisis kasus sudah menunjukkan penguasaan materi yang matang.';
+        color = 'var(--success)';
+      } else if (percent >= 70) {
+        title = 'Baik';
+        desc = 'Pemahaman Anda sudah baik. Masih ada beberapa bagian yang perlu ditinjau ulang agar lebih konsisten dalam memilih keputusan yang tepat.';
+        color = 'var(--primary)';
+      } else if (percent >= 55) {
+        title = 'Cukup';
+        desc = 'Dasar materi sudah dipahami, tetapi kemampuan analisis kasus masih perlu diperkuat melalui latihan dan telaah ulang materi.';
+        color = 'var(--gold)';
+      }
+
+      const radius = 82;
+      const circumference = 2 * Math.PI * radius;
+      const offset = circumference - (percent / 100) * circumference;
+
+      resultScreen.innerHTML = `
+        <div class="result-box">
+          <div class="score-ring-wrap">
+            <div class="score-ring">
+              <svg viewBox="0 0 200 200" aria-hidden="true">
+                <circle cx="100" cy="100" r="82" fill="none" stroke="var(--border)" stroke-width="12"></circle>
+                <circle cx="100" cy="100" r="82" fill="none" stroke="${color}" stroke-width="12" stroke-linecap="round"
+                  stroke-dasharray="${circumference}" stroke-dashoffset="${offset}"></circle>
+              </svg>
+              <div class="txt">${percent}%<small>Skor Akhir</small></div>
+            </div>
+          </div>
+          <h2>${title}</h2>
+          <p>${desc}</p>
+          <div class="summary">
+            <div class="box"><strong style="color:var(--success)">${correct}</strong><span>Benar</span></div>
+            <div class="box"><strong style="color:var(--danger)">${wrong}</strong><span>Salah</span></div>
+            <div class="box"><strong style="color:var(--gold)">${total}</strong><span>Total</span></div>
+          </div>
+          <div style="display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin-bottom:24px;">
+            <button class="primary-btn" id="restartBtn">Ulangi Kuis</button>
+            <button class="secondary-btn" id="backHomeBtn">Kembali ke Beranda</button>
+          </div>
+          <div class="review">
+            <h3>Ringkasan Jawaban</h3>
+            ${questions.map((q, i) => {
+              const a = answers[i];
+              const ok = a && a.correct;
+              return `
+                <div class="review-item">
+                  <div class="badge ${ok ? 'ok' : 'bad'}">${ok ? '✓' : '✕'}</div>
+                  <div>
+                    <strong>Soal ${i + 1} — ${q.category}</strong>
+                    <small>Jawaban benar: ${String.fromCharCode(65 + q.answer)}${a && !ok ? ` · Jawaban Anda: ${String.fromCharCode(65 + a.choice)}` : ''}</small>
+                  </div>
+                </div>`;
+            }).join('')}
+          </div>
+          <div class="footnote">Kuis ini dibuat dari materi PDF BTCLS BHD dan difokuskan pada analisis kasus serta pengambilan keputusan.</div>
+        </div>
+      `;
+
+      document.getElementById('restartBtn').addEventListener('click', () => {
+        answers = Array(questions.length).fill(null);
+        currentIndex = 0;
+        renderQuiz();
+        showScreen('quiz');
+      });
+      document.getElementById('backHomeBtn').addEventListener('click', () => {
+        answers = Array(questions.length).fill(null);
+        currentIndex = 0;
+        showScreen('home');
+      });
+    }
+
+    startBtn.addEventListener('click', () => {
+      renderQuiz();
+      showScreen('quiz');
+    });
+
+    prevBtn.addEventListener('click', () => {
+      if (currentIndex > 0) {
+        currentIndex--;
+        renderQuiz();
+      }
+    });
+
+    nextBtn.addEventListener('click', () => {
+      if (currentIndex < questions.length - 1) {
+        currentIndex++;
+        renderQuiz();
+      }
+    });
+
+    finishBtn.addEventListener('click', () => {
+      renderResult();
+      showScreen('result');
+    });
+
+    themeBtn.addEventListener('click', () => {
+      const root = document.documentElement;
+      const current = root.getAttribute('data-theme');
+      root.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
+    });
+  </script>
+</body>
+</html>
